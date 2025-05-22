@@ -134,6 +134,20 @@
                     <div id="reportContent" style="display: none;">
                     </div>
                 </div>
+
+                <!-- 新增情感關係分析區塊 -->
+                <div class="report-section">
+                    <div class="report-header">
+                        <h5>情感關係分析</h5>
+                        <div class="d-flex gap-2 mb-3">
+                            <input type="text" class="form-control" id="name1" placeholder="輸入第一個名字">
+                            <input type="text" class="form-control" id="name2" placeholder="輸入第二個名字">
+                            <button class="btn btn-primary" onclick="analyzeRelationship()">分析關係</button>
+                        </div>
+                    </div>
+                    <div id="relationshipResult" style="display: none;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,6 +247,34 @@
             '看美食節目訓練意志力，如果失敗就跟著吃。'
         ];
 
+        const relationshipResults = [
+            '適合做朋友',
+            '結果取決於你有沒有勇氣開口'
+        ];
+
+        const relationshipAnalysis = [
+            '經過複雜計算，你們的關係適合一起在路邊等紅燈。',
+            '經AI判斷，你們今天最適合同時呼吸氧氣。',
+            '你們的緣分像WiFi訊號，偶爾連得上，大多數時候都很弱。',
+            '分析結果：你們的名字湊在一起，並沒有什麼特別。',
+            '根據專業建議，建議你們彼此保持一米距離以策安全。',
+            '你們適合一起數羊，數到睡著為止。',
+            '分析顯示，這段關係的走向取決於月球公轉速度。',
+            '你們的緣分屬於「看到也沒感覺」型。',
+            '經分析，彼此的關係像拖鞋一樣，有左有右但永遠分開放。',
+            '最佳建議：有空記得吃飯，沒空也要吃飯。',
+            '恭喜！你們適合一起參加「誰比較無聊」大賽。',
+            '感情指數：請自行填空。',
+            'AI感測器無法偵測你們的化學反應，建議多試幾次。',
+            '你們的緣分在平行時空中有點微妙，但這裡好像沒什麼事。',
+            '根據統計，和你們一樣的關係地球上大約有75億組。',
+            '適合互相傳早安晚安，但其實不會有下文。',
+            '結論：兩個名字放在一起，就還是兩個名字。',
+            '感情狀態：「等下次隨機分析，也許有不同答案。」',
+            '建議：此時不如去喝杯水，對關係毫無幫助。',
+            '結果：好像可以做朋友，也好像不行，反正無所謂。'
+        ];
+
         function getRandomItems(array, count) {
             const shuffled = [...array].sort(() => 0.5 - Math.random());
             return shuffled.slice(0, count);
@@ -282,6 +324,33 @@
             
             reportContent.innerHTML = html;
             reportContent.style.display = 'block';
+        }
+
+        function analyzeRelationship() {
+            const name1 = document.getElementById('name1').value || '無名氏A';
+            const name2 = document.getElementById('name2').value || '無名氏B';
+            const resultDiv = document.getElementById('relationshipResult');
+            
+            const mainResult = getRandomItem(relationshipResults);
+            const analysis = getRandomItems(relationshipAnalysis, 3);
+            
+            let html = `
+                <div class="check-item mb-3">
+                    <strong>分析對象：</strong> ${name1} & ${name2}
+                </div>
+                <div class="check-item mb-3">
+                    <strong>分析結果：</strong> ${mainResult}
+                </div>
+                <div class="suggestion-box">
+                    <strong>詳細分析：</strong>
+                    <ul class="suggestion-list mt-2">
+                        ${analysis.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            resultDiv.innerHTML = html;
+            resultDiv.style.display = 'block';
         }
     </script>
 </body>
