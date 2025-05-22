@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>健康檢查報告</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --light-color: #ecf0f1;
+            --text-color: #2c3e50;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            font-family: 'Microsoft JhengHei', sans-serif;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .report-header {
+            border-bottom: 2px solid var(--light-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+        }
+
+        .check-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .check-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .suggestion-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .suggestion-list li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .suggestion-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .form-control {
+            border: 2px solid var(--light-color);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: none;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: white;
+            }
+            .report-section {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">健康檢查報告</span>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="report-section">
+                    <div class="report-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <input type="text" class="form-control mb-2" id="patientName" placeholder="請輸入姓名">
+                                <small class="text-muted">報告日期：<span id="reportDate"></span></small>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" onclick="generateReport()">生成報告</button>
+                                <button class="btn btn-outline-secondary ms-2" onclick="window.print()">列印報告</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="reportContent" style="display: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const healthItems = [
+            {
+                name: '身高',
+                results: [
+                    '比門矮一點',
+                    '站直約等於坐著的兩倍',
+                    '取決於量測時的心情',
+                    '介於0到3米之間'
+                ]
+            },
+            {
+                name: '體重',
+                results: [
+                    '比昨天多了幾個便當',
+                    '跟地心引力有關',
+                    '數字很有意義',
+                    '正負誤差5公斤以內'
+                ]
+            },
+            {
+                name: '血壓',
+                results: [
+                    '取決於量血壓時的驚嚇程度',
+                    '比平常人的高或低',
+                    '有數值但不重要',
+                    '需要再確認或者不用'
+                ]
+            },
+            {
+                name: '視力',
+                results: [
+                    '可以看見這份報告',
+                    '近視但看得見遠方',
+                    '遠視但看得見近處',
+                    '介於睜眼和閉眼之間'
+                ]
+            },
+            {
+                name: '聽力',
+                results: [
+                    '可以聽見別人說話',
+                    '選擇性接收良好',
+                    '取決於內容的重要性',
+                    '正常但裝聽不見'
+                ]
+            },
+            {
+                name: '心跳',
+                results: [
+                    '有在跳動',
+                    '速度不快不慢',
+                    '可能受到情緒影響',
+                    '比起昨天強度有變化'
+                ]
+            },
+            {
+                name: '骨密度',
+                results: [
+                    '比豆腐硬一點',
+                    '可能需要補充鈣質',
+                    '還可以支撐身體重量',
+                    '密度存在但不明顯'
+                ]
+            },
+            {
+                name: '肺活量',
+                results: [
+                    '足夠應付日常抱怨',
+                    '可以一口氣說完一段話',
+                    '跑步會喘但還活著',
+                    '正常但需要多呼吸'
+                ]
+            }
+        ];
+
+        const suggestions = [
+            '減肥的第一步，先買一台體重計，然後忘記放哪裡。',
+            '每天走到冰箱前，然後轉身回去，這也算有運動。',
+            '想吃就吃，吃完記得說「我明天再減」。',
+            '只吃零卡可樂搭配兩份炸雞，心理比較平衡。',
+            '覺得肚子餓就喝水，如果還是餓，再喝水。',
+            '運動後吃東西不會胖，因為你已經很累了。',
+            '少吃多動最健康，但多吃不動也很快樂。',
+            '每天站在體重計上五分鐘，算靜態有氧運動。',
+            '晚上九點後不吃東西，九點前先把該吃的都吃完。',
+            '如果減肥覺得痛苦，那就先不要減。',
+            '記錄下來你每次減肥失敗的理由，然後下次再複製一次。',
+            '減肥時可以多吃蔬菜，但如果有肉更好。',
+            '朋友請你吃大餐時，記得說「明天開始減肥」。',
+            '多笑一點，笑久了也會瘦臉（理論上）。',
+            '看美食節目訓練意志力，如果失敗就跟著吃。'
+        ];
+
+        function getRandomItems(array, count) {
+            const shuffled = [...array].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function getRandomItem(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+
+        function generateReport() {
+            const name = document.getElementById('patientName').value || '匿名病患';
+            document.getElementById('reportDate').textContent = new Date().toLocaleDateString('zh-TW');
+            
+            const selectedItems = getRandomItems(healthItems, 6);
+            const selectedSuggestions = getRandomItems(suggestions, 3);
+            const reportContent = document.getElementById('reportContent');
+            
+            let html = `
+                <div class="mb-4">
+                    <h5>基本資料</h5>
+                    <div class="check-item">
+                        受檢者：${name}<br>
+                        檢查日期：${new Date().toLocaleDateString('zh-TW')}
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>檢查結果</h5>`;
+            
+            selectedItems.forEach(item => {
+                html += `
+                    <div class="check-item">
+                        <span class="item-name">【${item.name}】</span>
+                        ${getRandomItem(item.results)}
+                    </div>`;
+            });
+            
+            html += `
+                </div>
+                
+                <div class="mb-4">
+                    <h5>醫師建議</h5>
+                    <ul class="suggestion-list">
+                        ${selectedSuggestions.map(suggestion => `<li>${suggestion}</li>`).join('')}
+                    </ul>
+                </div>`;
+            
+            reportContent.innerHTML = html;
+            reportContent.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
