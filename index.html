@@ -710,43 +710,92 @@
             
             // 載入 CSV 檔案
             async function loadQuestions() {
-                try {
-                    const response = await fetch('100_______.csv');
-                    if (!response.ok) {
-                        throw new Error('無法載入題目檔案');
+                // 預設的10個問題
+                allQuestions = [
+                    {
+                        id: "1",
+                        question: "有人突然對你說『你變了』，你會怎樣？",
+                        options: [
+                            { text: "認真反省一秒後轉頭繼續滑手機。", tag: "沒救" },
+                            { text: "問他哪裡變？是不是變帥了。", tag: "裝懂" }
+                        ]
+                    },
+                    {
+                        id: "2",
+                        question: "面試官問你缺點是什麼，你會說：",
+                        options: [
+                            { text: "太完美讓別人壓力大。", tag: "自戀" },
+                            { text: "無法拒絕躺著的誘惑。", tag: "懶鬼" }
+                        ]
+                    },
+                    {
+                        id: "3",
+                        question: "你走進房間發現地板在發光，你會？",
+                        options: [
+                            { text: "認真地思考自己是不是異世界主角。", tag: "戲精" },
+                            { text: "立刻拍限動打卡。", tag: "自戀" }
+                        ]
+                    },
+                    {
+                        id: "4",
+                        question: "你的房間有100隻鴨子，第一件事是？",
+                        options: [
+                            { text: "開直播拍片賺流量。", tag: "戲精" },
+                            { text: "把牠們命名再放進履歷寫上鴨群管理經驗。", tag: "裝懂" }
+                        ]
+                    },
+                    {
+                        id: "5",
+                        question: "你通常怎麼決定早餐？",
+                        options: [
+                            { text: "看緣分抽塔羅卡。", tag: "混亂" },
+                            { text: "吃昨天沒吃完的晚餐。", tag: "懶鬼" }
+                        ]
+                    },
+                    {
+                        id: "6",
+                        question: "你最常做的夢是什麼？",
+                        options: [
+                            { text: "夢見自己在睡覺。", tag: "懶鬼" },
+                            { text: "夢見自己是宇宙超級英雄。", tag: "戲精" }
+                        ]
+                    },
+                    {
+                        id: "7",
+                        question: "如果給你一個神奇按鈕，你會？",
+                        options: [
+                            { text: "研究按鈕的原理然後寫篇論文。", tag: "裝懂" },
+                            { text: "直接按下去看會發生什麼。", tag: "混亂" }
+                        ]
+                    },
+                    {
+                        id: "8",
+                        question: "朋友說你很厲害，你會？",
+                        options: [
+                            { text: "謙虛地說：『我知道。』", tag: "自戀" },
+                            { text: "開始懷疑朋友是不是想借錢。", tag: "沒救" }
+                        ]
+                    },
+                    {
+                        id: "9",
+                        question: "你的口頭禪是？",
+                        options: [
+                            { text: "『這個我懂！』（其實不懂）", tag: "裝懂" },
+                            { text: "『算了算了』（根本沒算）", tag: "沒救" }
+                        ]
+                    },
+                    {
+                        id: "10",
+                        question: "如果可以擁有一個超能力？",
+                        options: [
+                            { text: "時間暫停（多睡一會）", tag: "懶鬼" },
+                            { text: "讀心術（但只能讀到對方在想午餐）", tag: "混亂" }
+                        ]
                     }
-                    const csvText = await response.text();
-                    const lines = csvText.trim().split('\n').slice(1); // 跳過標題行並移除空行
-                    
-                    allQuestions = lines.filter(line => line.trim()).map(line => {
-                        const [id, question, optionA, tagA, optionB, tagB] = line.split(',').map(item => item.trim());
-                        if (!question || !optionA || !optionB) {
-                            throw new Error('題目資料格式錯誤');
-                        }
-                        return {
-                            id,
-                            question,
-                            options: [
-                                { text: optionA, tag: tagA },
-                                { text: optionB, tag: tagB }
-                            ]
-                        };
-                    });
-                    
-                    if (allQuestions.length === 0) {
-                        throw new Error('沒有可用的題目');
-                    }
-
-                    // 隨機選擇題目
-                    shuffleArray(allQuestions);
-                    currentQuestions = allQuestions.slice(0, 10); // 選擇10題
-                    showQuestion();
-                } catch (error) {
-                    console.error('載入題目時發生錯誤:', error);
-                    alert('載入題目時發生錯誤，請重新整理頁面或聯繫管理員。');
-                    // 重新開始測驗
-                    retakeTest();
-                }
+                ];
+                
+                currentQuestions = allQuestions;
+                showQuestion();
             }
 
             function shuffleArray(array) {
@@ -959,6 +1008,100 @@
                 }
             }
 
+            function createPersonalityChart() {
+                try {
+                    // 分析答案得到的標籤統計
+                    const tagStats = {
+                        '戲精': 0,
+                        '自戀': 0,
+                        '裝懂': 0,
+                        '懶鬼': 0,
+                        '混亂': 0,
+                        '沒救': 0
+                    };
+
+                    userAnswers.forEach(answer => {
+                        const tag = currentQuestions[userAnswers.indexOf(answer)].options[answer.answer].tag;
+                        tagStats[tag] = (tagStats[tag] || 0) + 1;
+                    });
+
+                    // 準備圖表數據
+                    const ctx = document.getElementById('personalityChart').getContext('2d');
+                    const chartData = {
+                        labels: Object.keys(tagStats),
+                        datasets: [{
+                            data: Object.values(tagStats),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(255, 159, 64, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    };
+
+                    // 建立圖表
+                    if (window.myChart) {
+                        window.myChart.destroy();
+                    }
+                    
+                    window.myChart = new Chart(ctx, {
+                        type: 'radar',
+                        data: chartData,
+                        options: {
+                            scales: {
+                                r: {
+                                    beginAtZero: true,
+                                    max: 5,
+                                    ticks: {
+                                        stepSize: 1
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    angleLines: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    pointLabels: {
+                                        color: '#ffffff'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+
+                    // 更新相容性圖表
+                    const dominantTag = analyzeTags(userAnswers);
+                    updateCompatibilityChart(dominantTag);
+                    
+                    // 顯示相容性部分
+                    document.querySelector('.compatibility-section').style.display = 'block';
+
+                } catch (error) {
+                    console.error('建立圖表時發生錯誤:', error);
+                    const chartContainer = document.querySelector('.personality-chart');
+                    if (chartContainer) {
+                        chartContainer.innerHTML = '<p class="text-danger">圖表載入失敗</p>';
+                    }
+                }
+            }
+
             function updateCompatibilityChart(personalityType) {
                 try {
                     if (!personalityType) {
@@ -1097,6 +1240,29 @@
                 document.getElementById('start-page').style.display = 'block';
                 document.getElementById('question-page').style.display = 'none';
             }
+
+            // 確保頁面載入時就開始載入問題
+            document.addEventListener('DOMContentLoaded', () => {
+                loadQuestions();
+            });
+
+            // 啟動測驗
+            document.addEventListener('DOMContentLoaded', function() {
+                // 初始化標籤頁切換功能
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        showTab(this.getAttribute('href').replace('#', ''));
+                    });
+                });
+
+                // 初始顯示測驗頁面
+                showTab('test');
+                
+                // 預載問題
+                loadQuestions();
+            });
         </script>
     </body>
 </html>
