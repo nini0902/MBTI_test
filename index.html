@@ -3,355 +3,1100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>健康檢查報告</title>
+    <title>沒必要但挺搞的測驗</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #34495e;
-            --accent-color: #3498db;
-            --light-color: #ecf0f1;
-            --text-color: #2c3e50;
+            --primary-bg: #1e1e2d;
+            --secondary-bg: #2b2b3d;
+            --accent-color: #7c3aed;
+            --text-color: #ffffff;
+            --text-secondary: #ffffff;
+            --card-bg: #252636;
+            --highlight: #9f7aea;
+            --border-color: #374151;
         }
-        
+
         body {
-            background-color: var(--light-color);
+            background-color: var(--primary-bg);
             color: var(--text-color);
-            font-family: 'Microsoft JhengHei', sans-serif;
-            line-height: 1.6;
+        }
+
+        .navbar-brand, 
+        .nav-link,
+        .nav-tabs .nav-link,
+        .card,
+        .btn-primary,
+        .option-btn,
+        .testimonial-text,
+        .testimonial-author,
+        .footer-link,
+        .compatibility-item,
+        .personality-item,
+        p, h1, h2, h3, h4, h5, h6,
+        .text-secondary,
+        .description,
+        .mbti-code,
+        .mbti-name,
+        .feature-list li,
+        .personality-stats,
+        .footer-heading,
+        .footer-link {
+            color: var(--text-color) !important;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--highlight) !important;
+        }
+
+        .footer-link:hover {
+            color: var(--highlight) !important;
         }
 
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--secondary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
         }
 
-        .report-section {
-            background: white;
+        .nav-tabs {
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--text-secondary);
+            border: none;
+            padding: 1rem 2rem;
+            margin-right: 0.5rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--highlight);
+            background: var(--card-bg);
+            border-bottom: 3px solid var(--highlight);
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--text-color);
+            background: var(--secondary-bg);
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .report-header {
-            border-bottom: 2px solid var(--light-color);
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-        }
-
-        .check-item {
-            padding: 10px 0;
-            border-bottom: 1px dashed #e0e0e0;
-        }
-
-        .check-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-name {
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .suggestion-list {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .suggestion-list li {
-            padding: 8px 0;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .suggestion-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
         .btn-primary {
-            background-color: var(--accent-color);
+            background: var(--accent-color);
             border: none;
-            padding: 10px 20px;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
-            background-color: #2980b9;
+            background: #5652c7;
+            transform: translateY(-2px);
         }
 
-        .form-control {
-            border: 2px solid var(--light-color);
-            padding: 10px;
+        .progress-bar {
+            height: 8px;
+            background: #444;
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        #question-text {
+            color: var(--text-color);
+            font-size: 1.2em;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: var(--secondary-bg);
+            border: 2px solid var(--accent-color);
+            color: var(--text-color);
+            font-size: 1.1em;
             border-radius: 10px;
+            transition: all 0.3s ease;
         }
 
-        .form-control:focus {
-            border-color: var(--accent-color);
-            box-shadow: none;
+        .option-btn:hover {
+            background: var(--accent-color);
+            color: var(--text-color);
+            transform: translateY(-2px);
         }
 
-        @media print {
-            .no-print {
-                display: none !important;
+        .result-card {
+            text-align: center;
+        }
+
+        .personality-chart {
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .mbti-emoji {
+            font-size: 4em;
+            margin: 1rem 0;
+        }
+
+        .mbti-code {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            margin: 1rem 0;
+        }
+
+        .description {
+            color: var(--text-color);
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin: 1.5rem 0;
+        }
+
+        .personality-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .personality-item {
+            background: var(--secondary-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .personality-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .personality-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .tab-content {
+            min-height: 400px;
+        }
+
+        #all-personalities {
+            display: none;
+        }
+
+        #all-personalities.active {
+            display: block;
+        }
+
+        .share-button {
+            background: var(--accent-color);
+            color: var(--text-color);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            margin: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            background: #5652c7;
+            transform: translateY(-2px);
+        }
+
+        .testimonial-card {
+            background: var(--secondary-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .testimonial-text {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .compatibility-chart {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .compatibility-item {
+            background: var(--secondary-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid;
+            color: var(--text-color);
+        }
+
+        .compatibility-good {
+            border-color: #10b981;
+        }
+
+        .compatibility-bad {
+            border-color: #ef4444;
+        }
+
+        footer {
+            background: var(--secondary-bg);
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-heading {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link:hover {
+            color: var(--highlight);
+        }
+
+        .site-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text-color);
+            margin-bottom: 0;
+            letter-spacing: 4px;
+            position: relative;
+            display: inline-block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .site-title:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 5px;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color);
+            transform: skew(-12deg);
+            opacity: 0.7;
+        }
+
+        .site-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-top: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .navbar .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 0;
+        }
+
+        .navbar-nav {
+            margin-top: 1rem;
+        }
+
+        .accordion-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .accordion-button {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            padding: 1rem 1.5rem;
+        }
+
+        .accordion-button:not(.collapsed) {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .accordion-button::after {
+            filter: invert(1);
+        }
+
+        .accordion-body {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 2rem;
+                text-align: center;
             }
-            body {
-                background-color: white;
-            }
-            .report-section {
-                box-shadow: none;
+            
+            .site-subtitle {
+                font-size: 1rem;
+                text-align: center;
             }
         }
     </style>
-</head>
-<body>
-    <nav class="navbar navbar-dark">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">健康檢查報告</span>
-        </div>
-    </nav>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <div class="text-center">
+                    <h1 class="site-title">MBTI</h1>
+                    <div class="site-subtitle">Might Be Totally Inaccurate</div>
+                </div>
+                <div class="navbar-nav ms-auto">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="showTab('test')">測驗</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showTab('personalities')">人格圖鑑</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showTab('testimonials')">用戶評價</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showTab('faq')">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-    <div class="container my-5">
-        <div class="row">
-            <div class="col-md-8 mx-auto">
-                <div class="report-section">
-                    <div class="report-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <input type="text" class="form-control mb-2" id="patientName" placeholder="請輸入姓名">
-                                <small class="text-muted">報告日期：<span id="reportDate"></span></small>
-                            </div>
-                            <div>
-                                <button class="btn btn-primary" onclick="generateReport()">生成報告</button>
-                                <button class="btn btn-outline-secondary ms-2" onclick="window.print()">列印報告</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="reportContent" style="display: none;">
+        <div class="container my-5">
+            <!-- 測驗頁面 -->
+            <div id="test-page">
+                <!-- 開始頁 -->
+                <div id="start-page" class="card">
+                    <h1 class="text-center site-title">MBTI</h1>
+                    <div class="text-center mb-4 site-subtitle">Might Be Totally Inaccurate</div>
+                    <p class="text-center mb-4">來看看你到底是哪種沙雕人格？<br>讓我們開始這趟荒謬的自我探索之旅！</p>
+                    <div class="text-center">
+                        <button class="btn btn-primary" onclick="startTest()">開始測驗</button>
                     </div>
                 </div>
 
-                <!-- 新增情感關係分析區塊 -->
-                <div class="report-section">
-                    <div class="report-header">
-                        <h5>情感關係分析</h5>
-                        <div class="d-flex gap-2 mb-3">
-                            <input type="text" class="form-control" id="name1" placeholder="輸入第一個名字">
-                            <input type="text" class="form-control" id="name2" placeholder="輸入第二個名字">
-                            <button class="btn btn-primary" onclick="analyzeRelationship()">分析關係</button>
+                <!-- 問題頁 -->
+                <div id="question-page" style="display: none;">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div class="question-card">
+                        <h3 id="question-text" class="mb-4"></h3>
+                        <div class="options-container">
+                            <button class="option-btn" onclick="selectOption(0)"></button>
+                            <button class="option-btn" onclick="selectOption(1)"></button>
                         </div>
                     </div>
-                    <div id="relationshipResult" style="display: none;">
+                </div>
+
+                <!-- 結果頁 -->
+                <div id="result-page" class="card result-card" style="display: none;">
+                    <h2>你的人格分析結果</h2>
+                    <div class="mbti-emoji" id="mbti-emoji"></div>
+                    <div class="mbti-code" id="mbti-result"></div>
+                    <div class="description" id="mbti-description"></div>
+                    
+                    <div class="personality-chart">
+                        <canvas id="personalityChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button class="share-button" onclick="shareResult()">分享結果</button>
+                        <button class="btn btn-primary" onclick="retakeTest()">重新測驗</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 人格圖鑑頁面 -->
+            <div id="personalities-page" class="card" style="display: none;">
+                <h2 class="text-center mb-4">人格圖鑑</h2>
+                <div class="personality-list" id="personality-list"></div>
+            </div>
+
+            <!-- 用戶評價頁面 -->
+            <div id="testimonials-page" class="card" style="display: none;">
+                <h2 class="text-center mb-4">真實用戶回饋</h2>
+                <div class="testimonials-container">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">「我以為這是心理測驗，結果被診斷成行走的問號 ❓ 我現在整個人都在疑問句裡面。」</p>
+                        <p class="testimonial-author">- 永遠搞不懂的小明</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">「被評為『假裝有在計劃型』，氣到我立刻列了三個代辦事項但還是沒做。」</p>
+                        <p class="testimonial-author">- 永遠拖延的阿龍</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">「說我打哈欠打到人類進化都能跳下一階段，謝謝你喔真的超鼓勵人。」</p>
+                        <p class="testimonial-author">- 睡不飽的小美</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">「我室友測完直接搬出去，說她不想跟一個『我就爛型』住在一起。求新室友！」</p>
+                        <p class="testimonial-author">- 突然失去室友的阿華</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">「這測驗唯一準的地方是說我會笑爛，因為我真的笑到肚子痛。笑著笑著就哭了。」</p>
+                        <p class="testimonial-author">- 情緒起伏大的小玉</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">「這不是 MBTI，這是 MBDB（沒必要但挺白癡）測驗吧？但我怎麼測了十次...」</p>
+                        <p class="testimonial-author">- 上癮的阿傑</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 頁面 -->
+            <div id="faq-page" class="card" style="display: none;">
+                <h2 class="text-center mb-4">🤷 常見問題 FAQ（其實沒人問）</h2>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#a1">
+                                Q1：這個人格測驗準嗎？
+                            </button>
+                        </h2>
+                        <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                一點都不準，但至少它不會偷你資料（應該啦）。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">
+                                Q2：為什麼我會被判定為 ZZZL？
+                            </button>
+                        </h2>
+                        <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                因為你答題時有 40% 的時間在發呆，我們的系統看得一清二楚（其實只是亂抓）。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">
+                                Q3：可以重測嗎？
+                            </button>
+                        </h2>
+                        <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                當然可以，我們完全不負責結果一致性。想玩幾次就玩幾次，佛系經營。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4">
+                                Q4：這測驗背後有什麼科學依據嗎？
+                            </button>
+                        </h2>
+                        <div id="a4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                有，科學地亂寫的依據，請放心，我們自己都信了。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="q5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a5">
+                                Q5：可以分享給朋友嗎？
+                            </button>
+                        </h2>
+                        <div id="a5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                當然可以，讓朋友也一起被嗆一頓，友情更加深厚（或破裂）。
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const healthItems = [
-            {
-                name: '身高',
-                results: [
-                    '比門矮一點',
-                    '站直約等於坐著的兩倍',
-                    '取決於量測時的心情',
-                    '介於0到3米之間'
-                ]
-            },
-            {
-                name: '體重',
-                results: [
-                    '比昨天多了幾個便當',
-                    '跟地心引力有關',
-                    '數字很有意義',
-                    '正負誤差5公斤以內'
-                ]
-            },
-            {
-                name: '血壓',
-                results: [
-                    '取決於量血壓時的驚嚇程度',
-                    '比平常人的高或低',
-                    '有數值但不重要',
-                    '需要再確認或者不用'
-                ]
-            },
-            {
-                name: '視力',
-                results: [
-                    '可以看見這份報告',
-                    '近視但看得見遠方',
-                    '遠視但看得見近處',
-                    '介於睜眼和閉眼之間'
-                ]
-            },
-            {
-                name: '聽力',
-                results: [
-                    '可以聽見別人說話',
-                    '選擇性接收良好',
-                    '取決於內容的重要性',
-                    '正常但裝聽不見'
-                ]
-            },
-            {
-                name: '心跳',
-                results: [
-                    '有在跳動',
-                    '速度不快不慢',
-                    '可能受到情緒影響',
-                    '比起昨天強度有變化'
-                ]
-            },
-            {
-                name: '骨密度',
-                results: [
-                    '比豆腐硬一點',
-                    '可能需要補充鈣質',
-                    '還可以支撐身體重量',
-                    '密度存在但不明顯'
-                ]
-            },
-            {
-                name: '肺活量',
-                results: [
-                    '足夠應付日常抱怨',
-                    '可以一口氣說完一段話',
-                    '跑步會喘但還活著',
-                    '正常但需要多呼吸'
-                ]
-            }
-        ];
+        <!-- 相容性分析 -->
+        <div class="compatibility-section" style="display: none;">
+            <h3>相容性分析</h3>
+            <div class="compatibility-chart">
+                <div class="compatibility-item compatibility-good">
+                    <h4>最佳拍檔</h4>
+                    <p>LMAO (笑爛型) + WTFJ (假裝有在計劃型)<br>
+                    一個負責搞笑，一個負責記錄但從不執行</p>
+                </div>
+                <div class="compatibility-item compatibility-bad">
+                    <h4>災難組合</h4>
+                    <p>SIGH (無聲嘆息型) + BRUH (攤手型)<br>
+                    兩個都只會嘆氣，誰都不會主動解決問題</p>
+                </div>
+            </div>
+        </div>
 
-        const suggestions = [
-            '減肥的第一步，先買一台體重計，然後忘記放哪裡。',
-            '每天走到冰箱前，然後轉身回去，這也算有運動。',
-            '想吃就吃，吃完記得說「我明天再減」。',
-            '只吃零卡可樂搭配兩份炸雞，心理比較平衡。',
-            '覺得肚子餓就喝水，如果還是餓，再喝水。',
-            '運動後吃東西不會胖，因為你已經很累了。',
-            '少吃多動最健康，但多吃不動也很快樂。',
-            '每天站在體重計上五分鐘，算靜態有氧運動。',
-            '晚上九點後不吃東西，九點前先把該吃的都吃完。',
-            '如果減肥覺得痛苦，那就先不要減。',
-            '記錄下來你每次減肥失敗的理由，然後下次再複製一次。',
-            '減肥時可以多吃蔬菜，但如果有肉更好。',
-            '朋友請你吃大餐時，記得說「明天開始減肥」。',
-            '多笑一點，笑久了也會瘦臉（理論上）。',
-            '看美食節目訓練意志力，如果失敗就跟著吃。'
-        ];
-
-        const relationshipResults = [
-            '適合做朋友',
-            '結果取決於你有沒有勇氣開口'
-        ];
-
-        const relationshipAnalysis = [
-            '經過複雜計算，你們的關係適合一起在路邊等紅燈。',
-            '經AI判斷，你們今天最適合同時呼吸氧氣。',
-            '你們的緣分像WiFi訊號，偶爾連得上，大多數時候都很弱。',
-            '分析結果：你們的名字湊在一起，並沒有什麼特別。',
-            '根據專業建議，建議你們彼此保持一米距離以策安全。',
-            '你們適合一起數羊，數到睡著為止。',
-            '分析顯示，這段關係的走向取決於月球公轉速度。',
-            '你們的緣分屬於「看到也沒感覺」型。',
-            '經分析，彼此的關係像拖鞋一樣，有左有右但永遠分開放。',
-            '最佳建議：有空記得吃飯，沒空也要吃飯。',
-            '恭喜！你們適合一起參加「誰比較無聊」大賽。',
-            '感情指數：請自行填空。',
-            'AI感測器無法偵測你們的化學反應，建議多試幾次。',
-            '你們的緣分在平行時空中有點微妙，但這裡好像沒什麼事。',
-            '根據統計，和你們一樣的關係地球上大約有75億組。',
-            '適合互相傳早安晚安，但其實不會有下文。',
-            '結論：兩個名字放在一起，就還是兩個名字。',
-            '感情狀態：「等下次隨機分析，也許有不同答案。」',
-            '建議：此時不如去喝杯水，對關係毫無幫助。',
-            '結果：好像可以做朋友，也好像不行，反正無所謂。'
-        ];
-
-        function getRandomItems(array, count) {
-            const shuffled = [...array].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
-        }
-
-        function getRandomItem(array) {
-            return array[Math.floor(Math.random() * array.length)];
-        }
-
-        function generateReport() {
-            const name = document.getElementById('patientName').value || '匿名病患';
-            document.getElementById('reportDate').textContent = new Date().toLocaleDateString('zh-TW');
-            
-            const selectedItems = getRandomItems(healthItems, 6);
-            const selectedSuggestions = getRandomItems(suggestions, 3);
-            const reportContent = document.getElementById('reportContent');
-            
-            let html = `
-                <div class="mb-4">
-                    <h5>基本資料</h5>
-                    <div class="check-item">
-                        受檢者：${name}<br>
-                        檢查日期：${new Date().toLocaleDateString('zh-TW')}
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 class="footer-heading">關於我們</h5>
+                        <p>泛人格量子糾纏研究中心成立於2025年，專注於研究各種不務正業的人格特質。</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="footer-heading">聯絡資訊</h5>
+                        <a href="#" class="footer-link">電子郵件：contact@quantum-mbti.com</a>
+                        <a href="#" class="footer-link">地址：薛丁格的貓隔壁</a>
+                        <a href="#" class="footer-link">電話：(02) 2599-9999</a>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="footer-heading">法律資訊</h5>
+                        <a href="#" class="footer-link">隱私權政策</a>
+                        <a href="#" class="footer-link">使用條款</a>
+                        <a href="#" class="footer-link">免責聲明</a>
                     </div>
                 </div>
-                
-                <div class="mb-4">
-                    <h5>檢查結果</h5>`;
-            
-            selectedItems.forEach(item => {
-                html += `
-                    <div class="check-item">
-                        <span class="item-name">【${item.name}】</span>
-                        ${getRandomItem(item.results)}
-                    </div>`;
-            });
-            
-            html += `
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <p class="text-secondary">© 2025 泛人格量子糾纏研究中心. All rights reserved.</p>
+                    </div>
                 </div>
-                
-                <div class="mb-4">
-                    <h5>醫師建議</h5>
-                    <ul class="suggestion-list">
-                        ${selectedSuggestions.map(suggestion => `<li>${suggestion}</li>`).join('')}
-                    </ul>
-                </div>`;
-            
-            reportContent.innerHTML = html;
-            reportContent.style.display = 'block';
-        }
+            </div>
+        </footer>
 
-        function analyzeRelationship() {
-            const name1 = document.getElementById('name1').value || '無名氏A';
-            const name2 = document.getElementById('name2').value || '無名氏B';
-            const resultDiv = document.getElementById('relationshipResult');
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            const mbtiTypes = {
+                'ZZZL': {
+                    emoji: '💤',
+                    name: '睡覺型人格',
+                    description: '你的人格核心是一個鬧鐘從不響的靈魂。你相信真正的努力是翻身到最舒服的角度。人際交往對你來說像天氣預報：不準也不想看。別人活得很累，你活得很睏。你最常說的話是「再五分鐘」與「蛤，現在幾點？」'
+                },
+                'IDKT': {
+                    emoji: '🧠',
+                    name: '我也不知道型',
+                    description: '你總是處於準備進入思考狀態的階段。你對未來充滿模糊想像，對現在則感到無感。別人問你想做什麼時，你會認真點頭然後什麼也沒說。你是一塊會自動待機的電子寵物：外表正常，內部空白。'
+                },
+                'YAWN': {
+                    emoji: '😪',
+                    name: '打哈欠型人格',
+                    description: '你的存在是一種低電量生活哲學。你不喜歡爭論，因為那會浪費用來發呆的時間。你對世界的回應是：「可以先不要嗎？」你最嚮往的生活是—什麼都不嚮往，因為太麻煩。'
+                },
+                'WTHF': {
+                    emoji: '😐',
+                    name: '蛤什麼型人格',
+                    description: '你的反射神經與社會脈絡之間有時差。問題對你來說不重要，重要的是等下要吃什麼。你擅長在關鍵時刻露出「蛤？」的表情，然後突然結束對話。你不是沒在聽，只是在等靈魂上線。'
+                },
+                'OKNO': {
+                    emoji: '👀',
+                    name: '全盤否定型人格',
+                    description: '你的人生態度是：先說好，但我不一定會做。你總是表示同意，然後默默反方向前進。你是團隊中最安靜但最神秘的存在，因為大家根本搞不懂你到底有沒有來過。你活得像開放原始碼：沒人知道你改過什麼。'
+                },
+                'LMAO': {
+                    emoji: '😂',
+                    name: '笑爛型人格',
+                    description: '你的口頭禪是「我沒事」，但眼神裡已經放棄思考。你用笑掩蓋尷尬，用笑對抗無能，用笑笑面對人生—然後默默打開冷氣吹臉。你的人際關係像動態牆：好像很多，但點進去都沒有互動。'
+                },
+                'WTFJ': {
+                    emoji: '📝',
+                    name: '假裝有在計劃型人格',
+                    description: '你活得像一本未完的筆記本。喜歡列出超完整行程，但執行率跟國會出席率一樣低。你對人生的掌控方式是「先做表格再焦慮」。你不是沒努力，只是太會把重點放在字體大小和配色。'
+                },
+                'LOLX': {
+                    emoji: '🤪',
+                    name: '強行幽默型人格',
+                    description: '你總是在錯的時間講對的垃圾話。別人哭你笑，別人笑你更笑。你不是沒有情緒，只是永遠不給別人正常反應。你以為自己像網路迷因，結果大家以為你需要幫助。'
+                },
+                'IHML': {
+                    emoji: '💔',
+                    name: '我就爛型人格',
+                    description: '你是挫折的收藏家，悲劇的觀察員，放棄的行動派。你能在三秒內解釋失敗原因，但花三天還沒決定要不要努力。你不是沒有潛力，只是不相信潛力這種東西值得開發。'
+                },
+                'SIGH': {
+                    emoji: '😩',
+                    name: '無聲叹息型人格',
+                    description: '你說過最多的話是「唉」，你活得像一部安靜又長的紀錄片。你不是懶，只是害怕做了之後會更懶。你很有同理心，但那只是因為你也很常崩潰。你的情緒像蓄水池：平時不流動，一洩就爆。'
+                },
+                'BRUH': {
+                    emoji: '😑',
+                    name: '攤手型人格',
+                    description: '你對生活的熱情只維持到鬧鐘響的那一刻。你擅長「點頭假裝懂」，實際上只在乎午餐吃什麼。你不是不努力，只是會評估努力值和可能失敗率然後選擇放棄。你最大的強項是：把所有責任都歸給天氣。'
+                },
+                'FMLQ': {
+                    emoji: '🎭',
+                    name: '自認主角型人格',
+                    description: '你覺得全世界都是配角，自己的煩惱才是本季主線。你會懷疑別人是不是在看你，但從不考慮自己是不是太戲多。你喜歡對著鏡子練習回應尷尬場面，即使現實裡沒人鳥你。'
+                },
+                'TMIK': {
+                    emoji: '📢',
+                    name: '過度解釋型人格',
+                    description: '你的人設是資訊型NPC，別人問你幾點，你講時區與人類定義時間的歷史。你怕被誤會，也怕不被問，所以會自動開啟「補充模式」。你的腦內有永不打烊的語音導航，還不能關靜音。'
+                },
+                'AFKZ': {
+                    emoji: '🏃‍♂️',
+                    name: '神隱型人格',
+                    description: '你是社交場合的殘影，點名系統的天敵。你出現在群組只為打個「好」，然後再消失半年。你不是不喜歡大家，只是不喜歡大家知道你喜不喜歡大家。你的人設是：出現沒人驚喜，消失大家安心。'
+                },
+                'OOPS': {
+                    emoji: '💥',
+                    name: '懵懂行動派人格',
+                    description: '你的人生哲學是：「先動再說，出事再修。」你不是不怕錯，只是不知道哪裡會錯。你衝得快，摔得快，笑得也快。你經常說：「啊我以為這樣可以欸？」然後全場沉默。'
+                },
+                '???!': {
+                    emoji: '❓',
+                    name: '問號型人格',
+                    description: '你不是活在世界裡，而是活在每個「為什麼」裡。你像一個走失的Wi-Fi訊號，總是在嘗試理解但始終連不上邏輯。你不是沒想法，只是你的想法沒人能解碼。你的人生是一串未解析的變數。'
+                }
+            };
+
+            // 原始問題資料
+            let allQuestions = [];
             
-            const mainResult = getRandomItem(relationshipResults);
-            const analysis = getRandomItems(relationshipAnalysis, 3);
+            // 當前測驗使用的問題
+            let currentQuestions = [];
+            let currentQuestion = 0;
+            let userAnswers = [];
             
-            let html = `
-                <div class="check-item mb-3">
-                    <strong>分析對象：</strong> ${name1} & ${name2}
-                </div>
-                <div class="check-item mb-3">
-                    <strong>分析結果：</strong> ${mainResult}
-                </div>
-                <div class="suggestion-box">
-                    <strong>詳細分析：</strong>
-                    <ul class="suggestion-list mt-2">
-                        ${analysis.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-            
-            resultDiv.innerHTML = html;
-            resultDiv.style.display = 'block';
-        }
-    </script>
-</body>
+            // 載入 CSV 檔案
+            async function loadQuestions() {
+                try {
+                    const response = await fetch('100_______.csv');
+                    if (!response.ok) {
+                        throw new Error('無法載入題目檔案');
+                    }
+                    const csvText = await response.text();
+                    const lines = csvText.trim().split('\n').slice(1); // 跳過標題行並移除空行
+                    
+                    allQuestions = lines.filter(line => line.trim()).map(line => {
+                        const [id, question, optionA, tagA, optionB, tagB] = line.split(',').map(item => item.trim());
+                        if (!question || !optionA || !optionB) {
+                            throw new Error('題目資料格式錯誤');
+                        }
+                        return {
+                            id,
+                            question,
+                            options: [
+                                { text: optionA, tag: tagA },
+                                { text: optionB, tag: tagB }
+                            ]
+                        };
+                    });
+                    
+                    if (allQuestions.length === 0) {
+                        throw new Error('沒有可用的題目');
+                    }
+
+                    // 隨機選擇題目
+                    shuffleArray(allQuestions);
+                    currentQuestions = allQuestions.slice(0, 10); // 選擇10題
+                    showQuestion();
+                } catch (error) {
+                    console.error('載入題目時發生錯誤:', error);
+                    alert('載入題目時發生錯誤，請重新整理頁面或聯繫管理員。');
+                    // 重新開始測驗
+                    retakeTest();
+                }
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            async function startTest() {
+                if (allQuestions.length === 0) {
+                    await loadQuestions();
+                }
+                
+                // 從所有問題中隨機選擇10題
+                currentQuestions = allQuestions.slice(0, 10);
+                shuffleArray(currentQuestions);
+                
+                currentQuestion = 0;
+                userAnswers = [];
+                document.getElementById('start-page').style.display = 'none';
+                document.getElementById('question-page').style.display = 'block';
+                showQuestion();
+            }
+
+            function showQuestion() {
+                if (!currentQuestions || currentQuestions.length === 0) {
+                    console.error('沒有可用的題目');
+                    alert('載入題目時發生錯誤，請重新整理頁面。');
+                    retakeTest();
+                    return;
+                }
+
+                try {
+                    const questionData = currentQuestions[currentQuestion];
+                    if (!questionData) {
+                        throw new Error('無效的題目資料');
+                    }
+
+                    const progressPercentage = (currentQuestion / currentQuestions.length) * 100;
+                    document.getElementById('progress-fill').style.width = `${progressPercentage}%`;
+                    document.getElementById('question-text').textContent = questionData.question;
+
+                    const optionButtons = document.getElementsByClassName('option-btn');
+                    optionButtons[0].textContent = questionData.options[0].text;
+                    optionButtons[1].textContent = questionData.options[1].text;
+
+                    document.getElementById('question-page').style.display = 'block';
+                } catch (error) {
+                    console.error('顯示題目時發生錯誤:', error);
+                    alert('顯示題目時發生錯誤，請重新開始測驗。');
+                    retakeTest();
+                }
+            }
+
+            function selectOption(optionIndex) {
+                try {
+                    if (!currentQuestions[currentQuestion]) {
+                        throw new Error('無效的題目');
+                    }
+                    
+                    userAnswers.push({
+                        answer: optionIndex,
+                        tag: currentQuestions[currentQuestion].options[optionIndex].tag
+                    });
+                    
+                    if (currentQuestion < currentQuestions.length - 1) {
+                        currentQuestion++;
+                        showQuestion();
+                    } else {
+                        showResult();
+                    }
+                } catch (error) {
+                    console.error('選擇選項時發生錯誤:', error);
+                    alert('選擇選項時發生錯誤，請重新開始測驗。');
+                    retakeTest();
+                }
+            }
+
+            function analyzeTags(answers) {
+                const tagCounts = {};
+                answers.forEach(answer => {
+                    const tag = answer.tag;
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                });
+                
+                // 找出最多的標籤
+                let maxCount = 0;
+                let dominantTag = '';
+                for (const [tag, count] of Object.entries(tagCounts)) {
+                    if (count > maxCount) {
+                        maxCount = count;
+                        dominantTag = tag;
+                    }
+                }
+                return dominantTag;
+            }
+
+            function getRandomItems(array, count) {
+                const shuffled = [...array].sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            }
+
+            function generateRandomColor() {
+                try {
+                    const hue = Math.floor(Math.random() * 360);
+                    return `hsl(${hue}, 70%, 90%)`;
+                } catch (error) {
+                    console.error('生成顏色時發生錯誤:', error);
+                    return '#f0f0f0'; // 預設顏色
+                }
+            }
+
+            const personalityTags = {
+                '戲精': ['FMLQ', 'LMAO', 'LOLX'],
+                '自戀': ['TMIK', 'FMLQ', 'LOLX'],
+                '裝懂': ['TMIK', 'WTFJ', 'OOPS'],
+                '懶鬼': ['ZZZL', 'YAWN', 'AFKZ'],
+                '混亂': ['IDKT', 'OOPS', '???!'],
+                '沒救': ['IHML', 'BRUH', 'SIGH']
+            };
+
+            function showTab(tabName) {
+                const pages = {
+                    'test': 'test-page',
+                    'personalities': 'personalities-page',
+                    'testimonials': 'testimonials-page',
+                    'faq': 'faq-page'
+                };
+
+                // Hide all pages
+                Object.values(pages).forEach(pageId => {
+                    document.getElementById(pageId).style.display = 'none';
+                });
+
+                // Show selected page
+                document.getElementById(pages[tabName]).style.display = 'block';
+
+                // Update active tab
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                event.target.classList.add('active');
+
+                if (tabName === 'personalities') {
+                    displayAllPersonalities();
+                }
+            }
+
+            function displayAllPersonalities() {
+                try {
+                    const container = document.getElementById('personality-list');
+                    if (!container) {
+                        throw new Error('找不到性格列表容器');
+                    }
+                    
+                    container.innerHTML = '';
+                    
+                    Object.entries(mbtiTypes).forEach(([code, data]) => {
+                        if (!data || !data.emoji || !data.name || !data.description) {
+                            throw new Error(`性格類型 ${code} 資料不完整`);
+                        }
+
+                        const div = document.createElement('div');
+                        div.className = 'personality-item';
+                        div.innerHTML = `
+                            <div class="d-flex align-items-center mb-3">
+                                <span class="personality-emoji" style="font-size: 2em; margin-right: 0.5rem;">${data.emoji}</span>
+                                <h3 class="personality-code mb-0">${code}</h3>
+                            </div>
+                            <h4 class="personality-name mb-2">${data.name}</h4>
+                            <p class="personality-description mb-0">${data.description}</p>
+                        `;
+                        container.appendChild(div);
+                    });
+                } catch (error) {
+                    console.error('顯示所有性格時發生錯誤:', error);
+                    const container = document.getElementById('personality-list');
+                    if (container) {
+                        container.innerHTML = '<p class="text-danger">載入性格資料時發生錯誤，請重新整理頁面</p>';
+                    }
+                }
+            }
+
+            function showResult() {
+                try {
+                    // 隱藏開始頁面和問題頁面
+                    document.getElementById('start-page').style.display = 'none';
+                    document.getElementById('question-page').style.display = 'none';
+                    
+                    // 顯示結果頁面
+                    document.getElementById('result-page').style.display = 'block';
+                    
+                    const dominantTag = analyzeTags(userAnswers);
+                    const possibleTypes = personalityTags[dominantTag] || [];
+                    const selectedType = possibleTypes[Math.floor(Math.random() * possibleTypes.length)] || 'IDKT';
+                    const result = mbtiTypes[selectedType];
+                    
+                    // 更新結果顯示
+                    document.getElementById('mbti-emoji').textContent = result.emoji;
+                    document.getElementById('mbti-result').textContent = selectedType;
+                    document.getElementById('mbti-description').textContent = result.description;
+                    
+                    // 如果需要的話，創建圖表
+                    createPersonalityChart();
+                } catch (error) {
+                    console.error('顯示結果時發生錯誤:', error);
+                    alert('顯示結果時發生錯誤，請重新開始測驗。');
+                    retakeTest();
+                }
+            }
+
+            function updateCompatibilityChart(personalityType) {
+                try {
+                    if (!personalityType) {
+                        throw new Error('未提供性格類型');
+                    }
+
+                    const compatibilityData = {
+                        'ZZZL': {
+                            good: ['YAWN', 'OKNO'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'IDKT': {
+                            good: ['OOPS', '???!'],
+                            bad: ['LMAO', 'WTFJ']
+                        },
+                        'YAWN': {
+                            good: ['ZZZL', 'OKNO'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'WTHF': {
+                            good: ['OOPS', '???!'],
+                            bad: ['LMAO', 'WTFJ']
+                        },
+                        'OKNO': {
+                            good: ['ZZZL', 'YAWN'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'LMAO': {
+                            good: ['WTFJ', 'LOLX'],
+                            bad: ['IHML', 'SIGH']
+                        },
+                        'WTFJ': {
+                            good: ['LMAO', 'LOLX'],
+                            bad: ['IHML', 'SIGH']
+                        },
+                        'LOLX': {
+                            good: ['LMAO', 'WTFJ'],
+                            bad: ['IHML', 'SIGH']
+                        },
+                        'IHML': {
+                            good: ['SIGH', 'BRUH'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'SIGH': {
+                            good: ['IHML', 'BRUH'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'BRUH': {
+                            good: ['IHML', 'SIGH'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'FMLQ': {
+                            good: ['TMIK', 'WTFJ'],
+                            bad: ['ZZZL', 'YAWN']
+                        },
+                        'TMIK': {
+                            good: ['FMLQ', 'WTFJ'],
+                            bad: ['ZZZL', 'YAWN']
+                        },
+                        'AFKZ': {
+                            good: ['ZZZL', 'YAWN'],
+                            bad: ['FMLQ', 'TMIK']
+                        },
+                        'OOPS': {
+                            good: ['IDKT', 'WTHF'],
+                            bad: ['LMAO', 'WTFJ']
+                        },
+                        '???!': {
+                            good: ['IDKT', 'WTHF'],
+                            bad: ['LMAO', 'WTFJ']
+                        }
+                    };
+
+                    // 更新相容性圖表內容
+                    const data = compatibilityData[personalityType] || {
+                        good: ['LMAO', 'WTFJ'],
+                        bad: ['SIGH', 'BRUH']
+                    };
+
+                    const goodContainer = document.querySelector('.compatibility-good');
+                    const badContainer = document.querySelector('.compatibility-bad');
+
+                    if (!goodContainer || !badContainer) {
+                        throw new Error('找不到相容性圖表容器');
+                    }
+
+                    goodContainer.innerHTML = '<h4>最佳拍檔</h4>';
+                    badContainer.innerHTML = '<h4>災難組合</h4>';
+
+                    data.good.forEach(type => {
+                        const personality = mbtiTypes[type];
+                        if (personality) {
+                            goodContainer.innerHTML += `
+                                <div class="compatibility-item">
+                                    <p class="mb-1"><strong>${type}</strong> (${personality.name})</p>
+                                    <small class="text-muted">${personality.emoji}</small>
+                            </div>`;
+                        }
+                    });
+
+                    data.bad.forEach(type => {
+                        const personality = mbtiTypes[type];
+                        if (personality) {
+                            badContainer.innerHTML += `
+                                <div class="compatibility-item">
+                                    <p class="mb-1"><strong>${type}</strong> (${personality.name})</p>
+                                    <small class="text-muted">${personality.emoji}</small>
+                            </div>`;
+                        }
+                    });
+                } catch (error) {
+                    console.error('更新相容性圖表時發生錯誤:', error);
+                    const containers = document.querySelectorAll('.compatibility-good, .compatibility-bad');
+                    containers.forEach(container => {
+                        if (container) {
+                            container.innerHTML = '<p class="text-danger">載入相容性資料時發生錯誤</p>';
+                        }
+                    });
+                }
+            }
+
+            function shareResult() {
+                const mbtiResult = document.getElementById('mbti-result').textContent;
+                const description = document.getElementById('mbti-description').textContent;
+                const shareText = `我的MBTI測驗結果：${mbtiResult}\n\n${description}\n\n快來測測你是哪種沙雕人格！`;
+                
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('結果已複製到剪貼板！');
+                });
+            }
+
+            function retakeTest() {
+                currentQuestion = 0;
+                userAnswers = [];
+                document.getElementById('result-page').style.display = 'none';
+                document.getElementById('start-page').style.display = 'block';
+                document.getElementById('question-page').style.display = 'none';
+            }
+        </script>
+    </body>
 </html>
