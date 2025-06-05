@@ -397,6 +397,9 @@
                             <a class="nav-link" href="#" onclick="showTab('testimonials')">用戶評價</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showTab('feedback')">反饋中心</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="#" onclick="showTab('faq')">FAQ</a>
                         </li>
                     </ul>
@@ -484,6 +487,30 @@
                         <p class="testimonial-author">- 上癮的阿傑</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- 反饋頁面 -->
+            <div id="feedback-page" class="card" style="display: none;">
+                <h2 class="text-center mb-4">用戶反饋中心</h2>
+                <p class="text-center mb-4">有什麼話想對我們說？請放心，我們有80%的機率不會看，但還是很開心收到你的吐槽。</p>
+                <form id="feedback-form">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">你的暱稱（選填）</label>
+                        <input type="text" class="form-control bg-dark text-light" id="name" placeholder="隨便打，反正我們不會記住">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">電子郵件（選填）</label>
+                        <input type="email" class="form-control bg-dark text-light" id="email" placeholder="給了也不會回你啦">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">留言內容（必填）</label>
+                        <textarea class="form-control bg-dark text-light" id="message" rows="4" required placeholder="請說點什麼，我們很寂寞..."></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">送出留言</button>
+                    </div>
+                </form>
+                <div id="feedback-response" class="alert alert-success mt-4" style="display: none;"></div>
             </div>
 
             <!-- FAQ 頁面 -->
@@ -1009,6 +1036,7 @@
                     'test': 'test-page',
                     'personalities': 'personalities-page',
                     'testimonials': 'testimonials-page',
+                    'feedback': 'feedback-page',
                     'faq': 'faq-page'
                 };
 
@@ -1439,6 +1467,81 @@
                 document.querySelector('.compatibility-section').style.display = 'none';
                 // 顯示開始頁面
                 document.getElementById('start-page').style.display = 'block';
+            }
+
+            // 搞笑回應列表
+            const funnyResponses = [
+                "感謝你的意見，我們已經用火箭發射到火星。",
+                "系統收到，正準備進入冬眠模式，請耐心等待喔。",
+                "我們的機器人現在在裝死，稍後再回覆你。",
+                "你留言的內容被我們的貓叼走了，不知道還找不找得回來。",
+                "我們把你的建議摺成紙飛機，飛出去找答案了。",
+                "你的建議已進入我們的無底深坑系統，保證再也找不到。",
+                "我們正派出一隻蝸牛快遞員來處理，請耐心等待（大概十年）。",
+                "謝謝你的意見，我們決定先吃個午餐再處理。",
+                "好問題，但我們的答案被風颳走了，還在回收中。",
+                "你的留言被AI拿去練深度學習了，它現在變得更白癡了。",
+                "感謝，我們的資料科學家正在用星座占卜你的回饋結果。",
+                "我們的開發團隊目前在午睡，等他們醒來再看看要不要處理。",
+                "已收到，我們已將此意見存入資料夾（命名：永不開啟）。",
+                "感謝回饋，我們已在馬桶沖掉它了，請放心。",
+                "好問題，我們的八卦台已經討論到三更半夜了，還是沒答案。",
+                "謝謝你的留言，我們的AI決定先算塔羅牌解決它。",
+                "這個意見已被派去環遊世界，等它回來會再告訴你。",
+                "好問題，不過剛好和我們的廁所一樣塞住了。",
+                "感謝你的貢獻，我們會把它當作段考考題出給自己。",
+                "我們正在研擬方案：決定先放進時光膠囊。",
+                "已收到，我們打算用舞龍舞獅慶祝一下再看。",
+                "你的意見已被我們的心理師送去冥想池發呆了。",
+                "感謝！系統目前陷入深度沉思，等它想完再告訴你。",
+                "好問題，我們打算先丟銅板決定要不要處理。",
+                "謝謝提醒，我們先開個會研究一下（不保證會開會）。",
+                "謝謝你的留言，我們決定先畫個圈圈祝福它。",
+                "我們已把你的留言送去跟小叮噹借道具解決。",
+                "我們的主機現在在洗澡，等它洗完會幫你看看。",
+                "你的意見很有建設性，我們先建一座摩天大樓。",
+                "感謝！系統已用10%的力量讀完留言，剩下90%會分期讀取。"
+            ];
+
+            // 處理反饋表單提交
+            document.getElementById('feedback-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('name').value || '神秘的陌生人';
+                const message = document.getElementById('message').value;
+                
+                if (!message.trim()) {
+                    return;
+                }
+                
+                // 隱藏表單
+                document.getElementById('feedback-form').style.display = 'none';
+                
+                // 隨機選擇一個搞笑回應
+                const randomResponse = funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
+                
+                // 顯示回應
+                const responseDiv = document.getElementById('feedback-response');
+                responseDiv.className = 'mt-4 p-3 bg-dark rounded text-light';
+                responseDiv.style.display = 'block';
+                responseDiv.innerHTML = `
+                    <div class="text-center">
+                        <h5 class="mb-3">親愛的 ${name}：</h5>
+                        <p class="mb-4">${randomResponse}</p>
+                        <div class="mt-4">
+                            <button class="btn btn-primary me-2" onclick="showFeedbackForm()">我要繼續留言</button>
+                        </div>
+                    </div>
+                `;
+                
+                // 重置表單
+                this.reset();
+            });
+
+            // 顯示反饋表單
+            function showFeedbackForm() {
+                document.getElementById('feedback-form').style.display = 'block';
+                document.getElementById('feedback-response').style.display = 'none';
             }
         </script>
     </body>
